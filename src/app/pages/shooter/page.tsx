@@ -1,10 +1,9 @@
 "use client"
 import { useRouter } from 'next/navigation';
 
-//redirect to the real home page
-export default function HomePage() {
+export default function ShooterPage() {
     const router = useRouter();
-    router.push("pages/home");
+    router.push("pages/shooter/list");
     return (
         <div>
             

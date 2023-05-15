@@ -1,3 +1,9 @@
+.contentGrid {
+    display: grid;
+    grid-template-rows: 5em auto;
+    height: 100%;
+}
+
 .contentBox {
     font-size: 0.85rem;
     max-width: var(--max-width);
@@ -5,8 +11,6 @@
     height: 100%;
     z-index: 2;
     font-family: var(--font-mono);
-    display: grid;
-    grid-template-rows: 4em auto;
     gap: 0px 0px;
 }
 

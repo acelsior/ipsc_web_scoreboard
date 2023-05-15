@@ -9,7 +9,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
     return (
-        <section>
+        <section className={styles.contentGrid}>
             {/* Include shared UI here e.g. a header or sidebar */}
             <nav className={styles.navBar}>
                 <Link href="pages/shooter/list" className={styles.card}>Shooter List</Link>

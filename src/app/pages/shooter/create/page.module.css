@@ -55,6 +55,7 @@
     border: 1px solid rgba(var(--callout-border-rgb), 0.85);
     box-shadow: 0 0 10px 0px rgba(var(--card-border-rgb), 0.1);
     text-align: center;
+    font-size: large;
 }
 .inputButton:hover {
     background: rgba(var(--card-rgb), 0.5);

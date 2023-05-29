@@ -89,7 +89,7 @@ export default function CreateShooter() {
                             className={styles.input}
                             name="division"
                         >
-                            <option selected value=""></option>
+                            <option value=""></option>
                             <option value="Open">Open</option>
                             <option value="Production">Production</option>
                             <option value="Standard">Standard</option>

@@ -1,0 +1,45 @@
+.timerContainer {
+    display: grid;
+    grid-template-rows: max-content auto;
+    height: 100%;
+}
+
+.timerControll {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 10em 5em 5em 5em;
+}
+.timerTimeDisplay {
+    grid-column: span 2;
+    align-self: center;
+    text-align: center;
+    font-size: 4em;
+}
+
+.timerControllButton {
+    font-family: var(--font-mono);
+    color: rgb(var(--foreground-rgb));
+    padding: 1rem 1.2rem;
+    border-radius: var(--border-radius);
+    background: rgba(var(--tile-start-rgb), 1);
+    border: 1px solid rgba(var(--card-border-rgb), 0);
+    transition: background 200ms, border 200ms;
+    width: 90%;
+    height: 90%;
+    border: 1px solid rgba(var(--callout-border-rgb), 0.85);
+    box-shadow: 0 0 10px 0px rgba(var(--card-border-rgb), 0.1);
+    margin: auto;
+    font-size: large;
+}
+.timerControllButton:hover {
+    background: rgba(var(--card-border-rgb), 0.1);
+    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+    box-shadow: 0 0 10px 0px rgba(var(--card-border-rgb), 0.12);
+}
+
+.timerHistory {
+    width: 95%;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}

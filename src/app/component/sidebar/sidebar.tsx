@@ -21,6 +21,7 @@ export default function SideBar({
                         <Link className={styles.card} href="/pages/stage">Stage</Link>
                         <Link className={styles.card} href="/pages/shooter">Shooter</Link>
                         <Link className={styles.card} href="/pages/scoreboard">Scoreboard</Link>
+                        <Link className={styles.card} href="/pages/timer">Timer</Link>
                     </div>
                     <div className={styles.contentBox}>
                         {children}

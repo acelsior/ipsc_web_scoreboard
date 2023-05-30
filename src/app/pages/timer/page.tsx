@@ -2,17 +2,25 @@
 import React from "react";
 import styles from "./page.module.css";
 import { Stopplate } from "@/app/class/stopplate/stopplate";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function TimerPage() {
+    const route = useRouter()
+    const pathname = usePathname();
     const [displayTime, setDisplayTime] = React.useState<number>(0);
     const [menuState, setMenuState] = React.useState<boolean>(false);
+    const stopplateInstance = Stopplate.getInstance();
 
     async function debugStopplate() {
-        await Stopplate.getInstance().connect();
-        await Stopplate.getInstance().startStopplateTimmer();
-        Stopplate.getInstance().registerHitEvent((event, value) => {
+        await stopplateInstance.connect();
+        await stopplateInstance.startStopplateTimmer();
+        stopplateInstance.registerHitEvent((event, value) => {
             console.log(event, value);
         });
+    }
+
+    function openMenu() {
+        route.push(pathname + "/menu");
     }
 
     if (menuState)
@@ -28,7 +36,12 @@ export default function TimerPage() {
                     <h1 className={styles.timerTimeDisplay}>
                         {displayTime.toFixed(2)}
                     </h1>
-                    <button className={styles.timerControllButton}>Menu</button>
+                    <button
+                        className={styles.timerControllButton}
+                        onClick={openMenu}
+                    >
+                        Menu
+                    </button>
                     <button className={styles.timerControllButton}>
                         Start
                     </button>

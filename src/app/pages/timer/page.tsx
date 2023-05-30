@@ -5,7 +5,7 @@ import { Stopplate } from "@/app/class/stopplate/stopplate";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function TimerPage() {
-    const route = useRouter()
+    const route = useRouter();
     const pathname = usePathname();
     const [displayTime, setDisplayTime] = React.useState<number>(0);
     const [menuState, setMenuState] = React.useState<boolean>(false);
@@ -17,6 +17,28 @@ export default function TimerPage() {
         stopplateInstance.registerHitEvent((event, value) => {
             console.log(event, value);
         });
+    }
+
+    function startHandler() {
+        countDown(1000, () => {
+            console.log("done");
+        });
+    }
+
+    async function countDown(ms: number, cb: Function) {
+        await new Promise<void>((solve) => {
+            var intervalID: NodeJS.Timer;
+            var startTime = Date.now();
+            intervalID = setInterval(() => {
+                console.log("countDown");
+                setDisplayTime(Math.abs((ms + (startTime - Date.now())) / 1000));
+            });
+            setTimeout(() => {
+                clearInterval(intervalID);
+                solve();
+            }, ms);
+        });
+        cb();
     }
 
     function openMenu() {
@@ -34,7 +56,7 @@ export default function TimerPage() {
             <div className={styles.timerContainer}>
                 <div className={styles.timerControll}>
                     <h1 className={styles.timerTimeDisplay}>
-                        {displayTime.toFixed(2)}
+                        {(displayTime).toFixed(2)}
                     </h1>
                     <button
                         className={styles.timerControllButton}
@@ -42,7 +64,10 @@ export default function TimerPage() {
                     >
                         Menu
                     </button>
-                    <button className={styles.timerControllButton}>
+                    <button
+                        className={styles.timerControllButton}
+                        onClick={startHandler}
+                    >
                         Start
                     </button>
                     <button className={styles.timerControllButton}>

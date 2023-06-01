@@ -102,7 +102,7 @@ export class Stopplate {
     async startStopplateTimmer() {
         return await this.startSignalChar?.readValue();
     }
-    registerHitEvent(cb: (event: Event, value: String) => void) {
+    registerHitEvent(cb: (event: Event, value: StopplateHitTimeDTO) => void) {
         this.onHitListener.push(cb);
     }
     async getSettingFromStopplate(): Promise<SettingStoreDTO> {
@@ -111,7 +111,9 @@ export class Stopplate {
     async writeSettingFromStopplate(newConfig: SettingStoreDTO) {
         return await this.settingStoreChar?.writeValueWithoutResponse(new TextEncoder().encode(JSON.stringify(newConfig)));
     }
-
+    removeAllEventListener() {
+        this.onHitListener = [];
+    }
     
 
     private onDisconnected() {

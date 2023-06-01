@@ -1,8 +1,24 @@
 "use client";
-import React from "react";
+import React, { ReactNode } from "react";
 import styles from "./page.module.css";
-import { Stopplate } from "@/app/class/stopplate/stopplate";
+import {
+    Stopplate,
+    StopplateHitTimeDTO,
+} from "@/app/class/stopplate/stopplate";
 import { usePathname, useRouter } from "next/navigation";
+import { BuzzerWaveformObject, beep } from "@/app/class/buzzer";
+import HitHistoryItem from "@/app/component/timer/hitHistoryItem";
+function getRandomNumberInRange(min: number, max: number) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.random() * (max - min) + min; // The maximum is exclusive and the minimum is inclusive
+}
+
+export interface IHitHistory {
+    time: number;
+    splitTime: number;
+    shots: number;
+}
 
 export default function TimerPage() {
     const route = useRouter();
@@ -10,40 +26,143 @@ export default function TimerPage() {
     const [displayTime, setDisplayTime] = React.useState<number>(0);
     const [menuState, setMenuState] = React.useState<boolean>(false);
     const stopplateInstance = Stopplate.getInstance();
+    const [intervalID, setIntervalID] = React.useState<NodeJS.Timer | null>();
+    const [hitHistoryComponent, setHitHistoryComponent] = React.useState<
+        ReactNode[]
+    >([]);
+    const [hitHistory, setHitHistory] = React.useState<IHitHistory[]>([]);
+    const [currentViewIndex, setCurrentViewIndex] = React.useState<number>(0);
+    const [buttonDisableState, setButtonDisableState] = React.useState({
+        menu: false,
+        start: false,
+        clear: false,
+        review: false,
+        stop: true,
+    });
 
-    async function debugStopplate() {
-        await stopplateInstance.connect();
-        await stopplateInstance.startStopplateTimmer();
-        stopplateInstance.registerHitEvent((event, value) => {
-            console.log(event, value);
+    async function startHandler() {
+        clearHandler();
+        var setting = await stopplateInstance.getSettingFromStopplate();
+        setButtonDisableState({
+            menu: true,
+            start: true,
+            clear: false,
+            review: false,
+            stop: false,
         });
-    }
-
-    function startHandler() {
-        countDown(1000, () => {
+        var randomTime =
+            getRandomNumberInRange(
+                setting.minRandomTime,
+                setting.maxRandomTime
+            ) * 1000;
+        console.log(setting);
+        setCurrentViewIndex(0);
+        countDown(randomTime, () => {
             console.log("done");
+            beep(
+                setting.buzzerHertz,
+                BuzzerWaveformObject[setting.buzzerWaveform],
+                1000
+            );
+            stopplateInstance.startStopplateTimmer();
+            stopplateInstance.registerHitEvent(hitHandler);
+            setButtonDisableState({
+                menu: true,
+                start: true,
+                clear: true,
+                review: false,
+                stop: false,
+            });
         });
     }
 
     async function countDown(ms: number, cb: Function) {
-        await new Promise<void>((solve) => {
-            var intervalID: NodeJS.Timer;
-            var startTime = Date.now();
-            intervalID = setInterval(() => {
-                console.log("countDown");
-                setDisplayTime(Math.abs((ms + (startTime - Date.now())) / 1000));
-            });
-            setTimeout(() => {
-                clearInterval(intervalID);
-                solve();
-            }, ms);
+        const startCountDownTime = Date.now();
+        var __intervalID: NodeJS.Timer;
+        await new Promise<void>((resolve, reject) => {
+            __intervalID = setInterval(function () {
+                setIntervalID(__intervalID);
+                const diffTime = Date.now() - startCountDownTime;
+                setDisplayTime(Math.abs((ms - diffTime) / 1000));
+                if (diffTime >= ms) {
+                    setDisplayTime(0);
+                    resolve();
+                }
+            }, 1);
         });
+        clearInterval(__intervalID);
+        setIntervalID(null);
         cb();
+    }
+    function stopCountDown() {
+        clearInterval(intervalID as NodeJS.Timer);
+        setIntervalID(null);
+    }
+
+    function clearHandler() {
+        stopCountDown();
+        stopplateInstance.removeAllEventListener();
+        setDisplayTime(0);
+        setHitHistory([]);
+        setHitHistoryComponent([]);
+        setButtonDisableState({
+            menu: false,
+            start: false,
+            clear: false,
+            review: true,
+            stop: true,
+        });
     }
 
     function openMenu() {
         route.push(pathname + "/menu");
     }
+
+    function hitHandler(event: Event, value: StopplateHitTimeDTO) {
+        console.log(value);
+        var intDigits = 0;
+        intDigits += value.seconds;
+        intDigits += value.minutes * 60;
+        var decimalDigits = parseFloat("0." + value.milliseconds.toString());
+        var resualt = intDigits + decimalDigits;
+        setDisplayTime(resualt);
+        var splittime = 0;
+        if (hitHistoryComponent.length !== 0) {
+            splittime = Math.abs(resualt - hitHistory[0].time);
+        }
+        var newHitHistory = hitHistory;
+        newHitHistory.unshift({
+            shots: hitHistory.length + 1,
+            time: resualt,
+            splitTime: splittime,
+        });
+        setHitHistory(newHitHistory);
+        var newHitHistoryComponent = hitHistoryComponent;
+        newHitHistoryComponent.unshift(
+            <HitHistoryItem
+                key={hitHistoryComponent.length + 1}
+                hitTime={resualt}
+                shotsNumber={hitHistoryComponent.length + 1}
+                splitTime={splittime}
+            />
+        );
+        setHitHistoryComponent(newHitHistoryComponent);
+    }
+
+    const reviewHandler = () => {
+        stopplateInstance.removeAllEventListener();
+        setDisplayTime(hitHistory[currentViewIndex].time);
+        if (currentViewIndex + 1 == hitHistory.length)
+            setCurrentViewIndex(0);
+        else setCurrentViewIndex(currentViewIndex + 1);
+        setButtonDisableState({
+            menu: false,
+            start: false,
+            clear: false,
+            review: false,
+            stop: true,
+        });
+    };
 
     if (menuState)
         return (
@@ -56,35 +175,41 @@ export default function TimerPage() {
             <div className={styles.timerContainer}>
                 <div className={styles.timerControll}>
                     <h1 className={styles.timerTimeDisplay}>
-                        {(displayTime).toFixed(2)}
+                        {displayTime.toFixed(2)}
                     </h1>
                     <button
                         className={styles.timerControllButton}
                         onClick={openMenu}
+                        disabled={buttonDisableState.menu}
                     >
                         Menu
                     </button>
                     <button
                         className={styles.timerControllButton}
                         onClick={startHandler}
+                        disabled={buttonDisableState.start}
                     >
                         Start
                     </button>
-                    <button className={styles.timerControllButton}>
+                    <button
+                        className={styles.timerControllButton}
+                        onClick={clearHandler}
+                        disabled={buttonDisableState.clear}
+                    >
                         Clear
-                    </button>
-                    <button className={styles.timerControllButton}>
-                        Review
                     </button>
                     <button
                         className={styles.timerControllButton}
-                        style={{ gridColumn: "span 2", width: "95%" }}
-                        onClick={debugStopplate}
+                        onClick={reviewHandler}
+                        disabled={buttonDisableState.review}
                     >
-                        Manual Stop
+                        Review
                     </button>
                 </div>
-                <div className={styles.timerHistory}>dwadw</div>
+                <p>Hit History</p>
+                <div className={styles.timerHistory}>
+                    <div>{hitHistoryComponent}</div>
+                </div>
             </div>
         );
 }

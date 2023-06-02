@@ -151,17 +151,19 @@ export default function TimerPage() {
 
     const reviewHandler = () => {
         stopplateInstance.removeAllEventListener();
+        setButtonDisableState({
+            stop: true,
+            menu: false,
+            start: false,
+            clear: false,
+            review: false
+        })
+        if (hitHistory.length == 0)
+            return;
         setDisplayTime(hitHistory[currentViewIndex].time);
         if (currentViewIndex + 1 == hitHistory.length)
             setCurrentViewIndex(0);
         else setCurrentViewIndex(currentViewIndex + 1);
-        setButtonDisableState({
-            menu: false,
-            start: false,
-            clear: false,
-            review: false,
-            stop: true,
-        });
     };
 
     if (menuState)

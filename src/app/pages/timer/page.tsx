@@ -79,14 +79,14 @@ export default function TimerPage() {
     async function countDown(ms: number, cb: Function) {
         const startCountDownTime = Date.now();
         var __intervalID: NodeJS.Timer;
-        await new Promise<void>((resolve, reject) => {
-            __intervalID = setInterval(function () {
+        __intervalID = await new Promise<NodeJS.Timer>((resolve, reject) => {
+            var i__intervalID = setInterval(function () {
                 setIntervalID(__intervalID);
                 const diffTime = Date.now() - startCountDownTime;
                 setDisplayTime(Math.abs((ms - diffTime) / 1000));
                 if (diffTime >= ms) {
                     setDisplayTime(0);
-                    resolve();
+                    resolve(i__intervalID);
                 }
             }, 1);
         });

@@ -41,6 +41,10 @@ export default function TimerPage() {
     });
 
     async function startHandler() {
+        if (!stopplateInstance.isConnected) { 
+            alert("Please connect to the stoppplate !")
+            return;
+        }
         clearHandler();
         var setting = await stopplateInstance.getSettingFromStopplate();
         setButtonDisableState({

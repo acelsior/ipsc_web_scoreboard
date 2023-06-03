@@ -83,14 +83,14 @@ export default function TimerPage() {
     async function countDown(ms: number, cb: Function) {
         const startCountDownTime = Date.now();
         var __intervalID: NodeJS.Timer;
-        await new Promise<void>((resolve, reject) => {
-            __intervalID = setInterval(function () {
+        __intervalID = await new Promise<NodeJS.Timer>((resolve, reject) => {
+            var i__intervalID = setInterval(function () {
                 setIntervalID(__intervalID);
                 const diffTime = Date.now() - startCountDownTime;
                 setDisplayTime(Math.abs((ms - diffTime) / 1000));
                 if (diffTime >= ms) {
                     setDisplayTime(0);
-                    resolve();
+                    resolve(i__intervalID);
                 }
             }, 1);
         });
@@ -155,17 +155,19 @@ export default function TimerPage() {
 
     const reviewHandler = () => {
         stopplateInstance.removeAllEventListener();
+        setButtonDisableState({
+            stop: true,
+            menu: false,
+            start: false,
+            clear: false,
+            review: false
+        })
+        if (hitHistory.length == 0)
+            return;
         setDisplayTime(hitHistory[currentViewIndex].time);
         if (currentViewIndex + 1 == hitHistory.length)
             setCurrentViewIndex(0);
         else setCurrentViewIndex(currentViewIndex + 1);
-        setButtonDisableState({
-            menu: false,
-            start: false,
-            clear: false,
-            review: false,
-            stop: true,
-        });
     };
 
     if (menuState)

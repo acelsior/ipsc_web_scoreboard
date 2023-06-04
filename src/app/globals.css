@@ -109,3 +109,23 @@ a {
         color-scheme: dark;
     }
 }
+
+button {
+    display: block;
+    font-family: var(--font-mono);
+    color: rgb(var(--foreground-rgb));
+    padding: 1rem 1.2rem;
+    margin: 0 1em 0 1em;
+    border-radius: var(--border-radius);
+    background: rgba(var(--tile-start-rgb),1);
+    border: 1px solid rgba(var(--card-border-rgb), 0);
+    transition: background 200ms, border 200ms;
+    border: 1px solid rgba(var(--callout-border-rgb), 0.85);
+    box-shadow: 0 0 10px 0px rgba(var(--card-border-rgb), 0.1);
+    text-align: center;
+}
+button:hover {
+    background: rgba(var(--card-rgb), 0.1);
+    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+    box-shadow: 0 0 10px 0px rgba(var(--card-border-rgb), 0.12);
+}

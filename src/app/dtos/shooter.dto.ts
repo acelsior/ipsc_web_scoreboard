@@ -1,9 +1,11 @@
+import { Division } from "@/types";
+
 export type GetAllShooterDTO = ShooterDTO[]
 export interface ShooterDTO {
     id:        number;
     firstName: string;
     lastName:  string;
-    division:  string;
+    division:  Division;
     createAt:  Date;
     profile:   ProfileDTO;
     history:   HistoryDTO[];

@@ -23,7 +23,7 @@ export default function CreateShooter() {
 
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
-        fetch(`http://${location.hostname}:3001/shooter`, {
+        fetch(`https://constrmrf.tk/api/shooter`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -37,19 +37,24 @@ export default function CreateShooter() {
         }).then((res) =>
             res.json().then((json) => {
                 if (json.status != 400) {
-                    fetch(`http://${location.hostname}:3001/shooter/${json.id}/profile`, {
-                        method: "POST",
-                    }).then((res) =>
+                    fetch(
+                        `https://constrmrf.tk/api/shooter/${json.id}/profile`,
+                        {
+                            method: "POST",
+                        }
+                    ).then((res) =>
                         res.json().then((json) => {
                             if (json.status != 400) {
                                 console.log("Success create shooter");
                                 alert("Create shooter succeeded");
-                                router.back();
+                                router.replace("/pages/shooter/list");
                             }
                         })
                     );
                 } else {
-                    alert("Failed to create a shooter, please check the field was filled properly");
+                    alert(
+                        "Failed to create a shooter, please check the field was filled properly"
+                    );
                 }
             })
         );

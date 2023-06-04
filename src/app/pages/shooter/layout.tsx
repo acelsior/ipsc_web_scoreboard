@@ -12,8 +12,8 @@ export default function DashboardLayout({
         <section className={styles.contentGrid}>
             {/* Include shared UI here e.g. a header or sidebar */}
             <nav className={styles.navBar}>
-                <Link href="pages/shooter/list" className={styles.card}>Shooter List</Link>
-                <Link href="pages/shooter/create" className={styles.card}>New Shooter</Link>
+                <Link href="/pages/shooter/list" className={styles.card}>Shooter List</Link>
+                <Link href="/pages/shooter/create" className={styles.card}>New Shooter</Link>
             </nav>
             <div className={styles.contentBox}>
                 {children}

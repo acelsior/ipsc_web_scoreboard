@@ -1,0 +1,29 @@
+.shooterCardContainer {
+    font-family: var(--font-mono);
+    font-size: x-large;
+    color: rgb(var(--foreground-rgb));
+    padding: 1rem 1.2rem;
+    margin: 1em 0 0 0;
+    border-radius: var(--border-radius);
+    background-color: rgba(var(--card-rgb), 0.25);
+    border: 1px solid rgba(var(--card-border-rgb), 0);
+    transition: background 200ms, border 200ms;
+    width: 100%;
+    border: 1px solid rgba(var(--callout-border-rgb), 0.15);
+    box-shadow: 0 0 10px 0px rgba(var(--card-border-rgb), 0.1);
+    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.rightContianer {
+    display: flex;
+    justify-content: right;
+}
+
+@media (max-width: 600px) {
+    .shooterCardContainer {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}

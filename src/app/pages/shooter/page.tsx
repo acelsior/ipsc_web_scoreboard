@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function ShooterPage() {
     const router = useRouter();
-    React.useEffect(() => router.push("pages/shooter/list"), [])
+    React.useEffect(() => router.push("pages/shooter/list"))
     return (
         <div>
             

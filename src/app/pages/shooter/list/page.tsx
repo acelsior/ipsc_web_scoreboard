@@ -1,41 +1,32 @@
+"use client";
 import ShooterCard from "@/app/component/shooterCard/shooterCard";
 import { GetAllShooterDTO } from "@/app/dtos/shooter.dto";
-import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { useRouter } from "next/router";
-import React, { ReactNode } from "react";
+import React from "react";
+import useSWR from "swr";
 
-export const getServerSideProps = async (): Promise<GetAllShooterDTO> => {
-    const res = await fetch(`https://constrmrf.tk/api/shooter`, {
-        method: "GET",
-        next: {
-            revalidate: 1,
-        },
-    });
+const fetcher = (url: string) =>
+    fetch(url, { method: "GET" }).then((res) => res.json());
 
-    return res.json();
-};
+export default function ShooterList() {
+    const { data, error } = useSWR<GetAllShooterDTO>(
+        "https://constrmrf.tk/api/shooter",
+        fetcher
+    );
 
-export default async function ShooterList() {
-    const res = await getServerSideProps();
-
-
-    var displayShooterList: ReactNode[] = [];
-
-    res.forEach((shooter) => {
-        displayShooterList.push(
-            <ShooterCard
-                firstName={shooter.firstName}
-                lastName={shooter.lastName}
-                division={shooter.division}
-                id={shooter.id}
-                key={shooter.id}
-            />
-        );
-    });
 
     return (
         <div>
-            <div>{displayShooterList}</div>
+            <div>
+                {data?.map((shooter) => (
+                    <ShooterCard
+                        division={shooter.division}
+                        firstName={shooter.firstName}
+                        id={shooter.id}
+                        lastName={shooter.lastName}
+                        key={shooter.id}
+                    />
+                ))}
+            </div>
         </div>
     );
 }

@@ -1,3 +1,4 @@
+import React from "react";
 import { BuzzerWaveformType } from "../buzzer";
 
 const STOPPLATE_SERVICE_UUID = "7a0247e7-8e88-409b-a959-ab5092ddb03e";
@@ -23,6 +24,8 @@ export interface SettingStoreDTO {
     buzzerHertz: number;
     buzzerWaveform: BuzzerWaveformType;
 }
+
+
 export class Stopplate {
     static instance: Stopplate;
 
@@ -79,9 +82,9 @@ export class Stopplate {
         await this.stopplateSignalChar.startNotifications();
         this.stopplateSignalChar.addEventListener(
             "characteristicvaluechanged",
-            (event) => {
+            (event: Event) => {
                 this.onHitListener.forEach((cb) => {
-                    cb(event, JSON.parse(new TextDecoder().decode(event.target?.value)))
+                    cb(event, JSON.parse(new TextDecoder().decode((event as unknown as {target:{value:BufferSource}}).target.value as BufferSource)))
                 })
             }
         );

@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, MutableRefObject } from "react";
 import style from "./page.module.css";
 import { BuzzerWaveformType } from "@/app/class/buzzer";
 import { SettingStoreDTO, Stopplate } from "@/app/class/stopplate/stopplate";
@@ -39,7 +39,7 @@ export default function MenuPage() {
     const [isConnected, setIsConnected] = React.useState<boolean>(
         stopplate.isConnected
     );
-    const timeOutRef = React.useRef(null);
+    const timeOutRef: MutableRefObject<any> = React.useRef(null);
     function throttle(fn: Function, delay: number) {
         if (!timeOutRef.current) {
             timeOutRef.current = setTimeout(() => {

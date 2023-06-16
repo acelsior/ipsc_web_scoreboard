@@ -1,4 +1,3 @@
-import { a } from "../../../types"
 import styles  from "./page.module.css"
 
 export default function StageList() {

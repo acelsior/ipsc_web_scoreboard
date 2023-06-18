@@ -12,7 +12,7 @@ export interface IShooterCardProps {
 
 export default function ShooterCard(props: IShooterCardProps) {
     function deleteShooterHandler() {
-        fetch(`https://constrmrf.tk/shooter/${props.id}`, {
+        fetch(`https://constrmrf.tk/api/shooter/${props.id}`, {
             method: "DELETE"
         });
     }

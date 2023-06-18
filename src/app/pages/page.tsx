@@ -1,10 +1,12 @@
 "use client"
 import { useRouter } from 'next/navigation';
+import React from "react";
 
 //redirect to the real home page
 export default function HomePage() {
     const router = useRouter();
-    router.push("pages/home");
+    React.useEffect(() => router.push("pages/home"));
+
     return (
         <div>
             

@@ -1,9 +1,10 @@
 "use client"
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
 export default function StagePage() {
     const router = useRouter();
-    router.push("pages/stage/list");
+    React.useEffect(() => router.push("pages/stage/list"));
     return (
         <div>
             

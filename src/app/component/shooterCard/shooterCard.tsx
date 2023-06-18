@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Division } from "@/types";
 import styles from "./shooterCard.module.css";
 import { useRouter } from "next/navigation";
@@ -11,10 +11,24 @@ export interface IShooterCardProps {
 }
 
 export default function ShooterCard(props: IShooterCardProps) {
+    const router = useRouter();
+
     function deleteShooterHandler() {
-        fetch(`https://constrmrf.tk/api/shooter/${props.id}`, {
-            method: "DELETE"
-        });
+        if (
+            confirm(
+                `Comfirm delete shooter ${props.firstName} ${props.lastName} ?`
+            )
+        ) {
+            fetch(`https://constrmrf.tk/api/shooter/${props.id}`, {
+                method: "DELETE",
+            });
+        }
+    }
+    function statisHandler() {
+        router.push(`/pages/shooter/statis/${props.id}`);
+    }
+    function settingHandler() {
+        router.push(`/pages/shooter/setting/${props.id}`)
     }
 
     return (
@@ -30,6 +44,8 @@ export default function ShooterCard(props: IShooterCardProps) {
                 </div>
             </div>
             <div className={styles.rightContianer}>
+                <button onClick={settingHandler}>Setting</button>
+                <button onClick={statisHandler}>Statistics</button>
                 <button
                     style={{
                         color: "red",
@@ -39,7 +55,6 @@ export default function ShooterCard(props: IShooterCardProps) {
                 >
                     DELETE
                 </button>
-                <button>Setting</button>
             </div>
         </div>
     );

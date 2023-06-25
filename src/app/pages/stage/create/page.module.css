@@ -1,0 +1,29 @@
+.formContainer {
+    display: grid;
+}
+
+.formContainer input,
+.formContainer textarea {
+    width: 100%;
+    display: block;
+    font-family: var(--font-mono);
+    color: rgb(var(--foreground-rgb));
+    padding: 1rem 1rem;
+    font-size: 1rem;
+    margin: 0 0 0 1em;
+    border-radius: var(--border-radius);
+    background: rgba(var(--tile-start-rgb),1);
+    border: 1px solid rgba(var(--callout-border-rgb), 0.25);
+}
+
+.inputContainer{
+    width: 100%;
+    display: flex;
+    align-self: center;
+    align-items: center;
+    margin: 1em;
+    padding: 0 0 0 1em;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(var(--callout-border-rgb), 0.25);
+    background-image: var(--tile-border);
+}

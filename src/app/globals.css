@@ -110,7 +110,7 @@ a {
     }
 }
 
-button {
+button, input[type="submit"] {
     display: block;
     font-family: var(--font-mono);
     color: rgb(var(--foreground-rgb));
@@ -124,7 +124,7 @@ button {
     box-shadow: 0 0 10px 0px rgba(var(--card-border-rgb), 0.1);
     text-align: center;
 }
-button:hover {
+button:hover, input[type="submit"] {
     background: rgba(var(--card-rgb), 0.1);
     border: 1px solid rgba(var(--card-border-rgb), 0.15);
     box-shadow: 0 0 10px 0px rgba(var(--card-border-rgb), 0.12);

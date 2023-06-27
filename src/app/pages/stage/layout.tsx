@@ -1,5 +1,4 @@
 "use client"
-import { useRouter } from 'next/navigation';
 import styles from "./layout.module.css"
 import Link from 'next/link';
 //redirect to list 

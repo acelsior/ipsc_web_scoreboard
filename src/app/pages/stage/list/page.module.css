@@ -8,3 +8,13 @@
     grid-template-rows: 4em auto;
     gap: 0px 0px;
 }
+
+.contentBox {
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+    overflow-y: scroll;
+}
+.contentBox-gap > div {
+    margin-top: 10px;
+}

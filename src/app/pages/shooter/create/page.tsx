@@ -10,7 +10,6 @@ export default function CreateShooter() {
     const [division, setDivison] = React.useState<string>("");
     const router = useRouter();
 
-
     function handleFirstNameChange(event: FormEvent<HTMLInputElement>) {
         setFirstName(event.currentTarget.value);
     }
@@ -37,20 +36,9 @@ export default function CreateShooter() {
         }).then((res) =>
             res.json().then((json) => {
                 if (json.status != 400) {
-                    fetch(
-                        `https://constrmrf.tk/api/shooter/${json.id}/profile`,
-                        {
-                            method: "POST",
-                        }
-                    ).then((res) =>
-                        res.json().then((json) => {
-                            if (json.status != 400) {
-                                console.log("Success create shooter");
-                                alert("Create shooter succeeded");
-                                router.replace("/pages/shooter/list");
-                            }
-                        })
-                    );
+                    console.log("Success create shooter");
+                    alert("Create shooter succeeded");
+                    router.replace("/pages/shooter/list");
                 } else {
                     alert(
                         "Failed to create a shooter, please check the field was filled properly"
@@ -103,7 +91,11 @@ export default function CreateShooter() {
                     </div>
                 </div>
                 <div className={styles.formRow}>
-                    <input className={styles.inputButton} type="submit" value="Submit" />
+                    <input
+                        className={styles.inputButton}
+                        type="submit"
+                        value="Submit"
+                    />
                 </div>
             </form>
         </div>

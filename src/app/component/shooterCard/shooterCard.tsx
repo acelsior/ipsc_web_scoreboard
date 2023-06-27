@@ -19,7 +19,7 @@ export default function ShooterCard(props: IShooterCardProps) {
                 `Comfirm delete shooter ${props.firstName} ${props.lastName} ?`
             )
         ) {
-            fetch(`https://constrmrf.tk/api/shooter/${props.id}`, {
+            fetch(`https://api.constrmrf.tk/api/shooter/${props.id}`, {
                 method: "DELETE",
             });
         }

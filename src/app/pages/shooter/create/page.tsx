@@ -22,7 +22,7 @@ export default function CreateShooter() {
 
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
-        fetch(`https://constrmrf.tk/api/shooter`, {
+        fetch(`https://api.constrmrf.tk/api/shooter`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

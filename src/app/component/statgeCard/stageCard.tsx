@@ -6,7 +6,7 @@ export default function StageCard(props: GetStageDTO) {
     const deleteStageHandler = () => {
         const confirmRes = confirm(`Confirm delete stage "${props.title}"`)
         if (confirmRes) {
-            fetch(`https://constrmrf.tk/api/stage/${props.id}`, {
+            fetch(`https://api.constrmrf.tk/api/stage/${props.id}`, {
                 method: 'DELETE'
             }).then(res => res.json()).then(res => {
                 if (res.affected >= 1) {
@@ -26,7 +26,7 @@ export default function StageCard(props: GetStageDTO) {
             <img
                 className={styles.stageImg}
                 alt={props.title}
-                src={`https://constrmrf.tk/api/image/${props.images[0].id}`}
+                src={`https://api.constrmrf.tk/api/image/${props.images[0].id}`}
             />
             <div className={styles.rightButtonGroup}>
                 <button

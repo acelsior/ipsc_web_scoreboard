@@ -9,7 +9,7 @@ const fetcher = (url: string) =>
 
 export default function ShooterList() {
     const { data, error } = useSWR<GetAllShooterDTO>(
-        "https://constrmrf.tk/api/shooter",
+        "https://api.constrmrf.tk/api/shooter",
         fetcher
     );
 

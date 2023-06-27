@@ -10,7 +10,7 @@ const getFetcher = (url: string) =>
 
 export default function StageList() {
     const { data, error } = useSWR<GetStageDTO[]>(
-        "https://constrmrf.tk/api/stage",
+        "https://api.constrmrf.tk/api/stage",
         getFetcher
     );
     return (

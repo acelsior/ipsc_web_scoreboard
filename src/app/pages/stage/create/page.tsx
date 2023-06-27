@@ -70,7 +70,7 @@ export default function CreateStage() {
     const submitHandler = async(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const imageCb: ImagesDTO = await (await fetch("https://constrmrf.tk/api/image", {
+        const imageCb: ImagesDTO = await (await fetch("https://api.constrmrf.tk/api/image", {
             method: "POST", 
             body: photos,
         })).json()
@@ -79,7 +79,7 @@ export default function CreateStage() {
             imageIDList.push(image.id)
         })
 
-        fetch("https://constrmrf.tk/api/stage/", {
+        fetch("https://api.constrmrf.tk/api/stage/", {
             method: "POST",
             headers: [["Content-Type", "application/json"]],
             body: JSON.stringify({

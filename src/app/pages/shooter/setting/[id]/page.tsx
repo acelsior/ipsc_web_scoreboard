@@ -14,7 +14,7 @@ export default function ShooterSetttingPage(props: { params: { id: any } }) {
 
     React.useEffect(() => {
         if (hasInited) return;
-        fetch(`https://constrmrf.tk/api/shooter/${props.params.id}`, {
+        fetch(`https://api.constrmrf.tk/api/shooter/${props.params.id}`, {
             method: "GET",
         })
             .then((response) => response.json())
@@ -45,7 +45,7 @@ export default function ShooterSetttingPage(props: { params: { id: any } }) {
                 division: division,
             })
         );
-        fetch(`https://constrmrf.tk/api/shooter/${props.params.id}`, {
+        fetch(`https://api.constrmrf.tk/api/shooter/${props.params.id}`, {
             method: "PUT",
             headers: [["Content-Type", "application/json"]],
             body: JSON.stringify({

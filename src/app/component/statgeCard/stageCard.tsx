@@ -3,7 +3,6 @@ import { GetStageDTO } from "@/app/dtos/stage.dto";
 import styles from "./stageCard.module.css";
 
 export default function StageCard(props: GetStageDTO) {
-
     const deleteStageHandler = () => {
         const confirmRes = confirm(`Confirm delete stage "${props.title}"`)
         if (confirmRes) {
@@ -27,7 +26,7 @@ export default function StageCard(props: GetStageDTO) {
             <img
                 className={styles.stageImg}
                 alt={props.title}
-                src={props.photo}
+                src={`https://constrmrf.tk/api/image/${props.images[0].id}`}
             />
             <div className={styles.rightButtonGroup}>
                 <button
@@ -70,8 +69,8 @@ export default function StageCard(props: GetStageDTO) {
                     }}
                 >
                     <p>
-                        {props.stageType} Stage, Min rounds: {props.minRounds},
-                        Max rounds: {props.maxScores}
+                        {props.stageType} Stage, Min rounds: {props.minRounds}+1,
+                        Max scores: {props.maxScores}
                     </p>
                 </div>
             </div>

@@ -3,7 +3,8 @@
 }
 
 .formContainer input,
-.formContainer textarea {
+.formContainer textarea,
+.input {
     width: 100%;
     display: block;
     font-family: var(--font-mono);
@@ -12,11 +13,11 @@
     font-size: 1rem;
     margin: 0 0 0 1em;
     border-radius: var(--border-radius);
-    background: rgba(var(--tile-start-rgb),1);
+    background: rgba(var(--tile-start-rgb), 1);
     border: 1px solid rgba(var(--callout-border-rgb), 0.25);
 }
 
-.inputContainer{
+.inputContainer {
     width: 100%;
     display: flex;
     align-self: center;
@@ -26,4 +27,18 @@
     border-radius: var(--border-radius);
     border: 1px solid rgba(var(--callout-border-rgb), 0.25);
     background-image: var(--tile-border);
+}
+
+
+.stageInfoContainer {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+}
+.stageInfoContainer p{
+    display: inline-block;
+    margin: 10px;
 }

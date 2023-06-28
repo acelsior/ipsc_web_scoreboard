@@ -13,20 +13,23 @@ export default function ShooterList() {
         fetcher
     );
 
-
     return (
         <div>
-            <div>
-                {data?.map((shooter) => (
-                    <ShooterCard
-                        division={shooter.division}
-                        firstName={shooter.firstName}
-                        id={shooter.id}
-                        lastName={shooter.lastName}
-                        key={shooter.id}
-                    />
-                ))}
-            </div>
+            {data ? (
+                <div>
+                    {data?.map((shooter) => (
+                        <ShooterCard
+                            division={shooter.division}
+                            firstName={shooter.firstName}
+                            id={shooter.id}
+                            lastName={shooter.lastName}
+                            key={shooter.id}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <h1>Loading...</h1>
+            )}
         </div>
     );
 }

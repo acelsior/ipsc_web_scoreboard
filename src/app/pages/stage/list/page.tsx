@@ -15,11 +15,15 @@ export default function StageList() {
     );
     return (
         <main className={styles.main}>
-            <div className={styles.contentBox}>
-                {data?.map((stage) => (
-                    <StageCard {...stage} key={stage.id} />
-                ))}
-            </div>
+            {data ? (
+                <div className={styles.contentBox}>
+                    {data?.map((stage) => (
+                        <StageCard {...stage} key={stage.id} />
+                    ))}
+                </div>
+            ) : (
+                <h1>Loading...</h1>
+            )}
         </main>
     );
 }

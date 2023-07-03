@@ -1,37 +1,36 @@
 import { Division } from "@/types";
 
-export type GetAllShooterDTO = ShooterDTO[]
+export type GetAllShooterDTO = ShooterDTO[];
 export interface ShooterDTO {
-    id:        number;
+    id: number;
     firstName: string;
-    lastName:  string;
-    division:  Division;
-    createAt:  Date;
-    profile:   ProfileDTO;
-    history:   HistoryDTO[];
+    lastName: string;
+    division: Division;
+    createAt: Date;
+    profile: ProfileDTO;
+    history: HistoryDTO[];
 }
 
 export interface ProfileDTO {
-    id:               number;
-    firstName:        string;
-    lastName:         string;
-    stageHaveFinish:  number;
+    id: number;
+    firstName: string;
+    lastName: string;
+    stageHaveFinish: number;
     averageHitFactor: number;
 }
-
 export interface HistoryDTO {
-    id:                  number;
-    firstName:           string;
-    lastName:            string;
-    alphaCount:          number;
-    charlieCount:        number;
-    deltaCount:          number;
-    plateCount:          number;
-    missCount:           number;
-    noShootCount:        number;
+    id: number;
+    alphaCount: number;
+    charlieCount: number;
+    deltaCount: number;
+    paperMissCount: number;
+    plateCount: number;
+    plateMissCount: number;
+    noShootCount: number;
     procedureErrorCount: number;
-    scoreCount:          number;
-    timeCount:           number;
-    hitFactor:           number;
-    disqualified:        boolean;
+    scoreCount: number;
+    timeCount: number;
+    hitFactor: number;
+    disqualified: boolean;
+    didNotFinished: boolean;
 }

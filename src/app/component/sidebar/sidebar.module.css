@@ -8,9 +8,11 @@
 
 .sideBarBox {
     font-family: var(--font-mono);
-    width: 100%;
-    height: 100vh;
-    position: relative;
+    width: 15rem;
+    /* height: 100vh; */
+    top:0;
+    bottom: 0;
+    position: static;
     margin: 0;
     padding: 1rem;
     background-color: rgba(var(--card-rgb), 0.25);
@@ -45,6 +47,7 @@
 }
 
 .contentBox {
+    grid-column: 2;
     padding: 6rem;
     min-height: 100vh;
 }

@@ -1,0 +1,98 @@
+.title {
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.scoringContainer {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: max-content;
+    width: 100%;
+}
+
+.scoringRows {
+    padding: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.scoringRows > button {
+    display: inline-block;
+}
+.scoringRowsRight > * {
+    display: inline-block;
+    text-align: center;
+}
+
+.paperTargetScoringRow {
+    display: grid;
+    grid-template-columns: 3em repeat(5, 1fr);
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.paperTargetScoringRow > span {
+    text-align: center;
+    border: 1px solid white;
+    padding: 1em;
+    vertical-align: middle;
+}
+
+.paperTargetScoringContainer {
+    width: 100%;
+}
+
+.header {
+    font-size: xx-large;
+    border: 1px solid white;
+    height: auto !important;
+    padding: 0 !important;
+}
+
+.procedualErrorListContainer {
+    display: grid;
+    grid-template-columns: auto max-content;
+    align-items: center !important;
+    justify-content: space-between;
+    padding: 5px !important;
+    margin: 5px !important;
+}
+
+.procedualErrorListContainer > h1 {
+    font-size: large;
+}
+
+.procedualErrorListButtonGroup > * {
+    vertical-align: middle !important;
+    display: inline-block;
+}
+
+.procedualErrorListTitle {
+    display: inline-block;
+}
+
+.scorePreivew {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.reviewDialog {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(11, 1fr);
+}
+
+.reviewDialog > p {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    vertical-align: middle;
+}

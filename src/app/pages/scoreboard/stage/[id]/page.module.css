@@ -1,0 +1,10 @@
+.scoreboardPageContainer {
+    display: grid;
+    height: 100%;
+    grid-template-rows: min-content auto;
+}
+
+.scoreboardShooterListContianer {
+    display: flex;
+    flex-direction: column;
+}

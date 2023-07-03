@@ -85,7 +85,7 @@ export default function CreateStage() {
             body: JSON.stringify({
                 title: title,
                 description: description,
-                stageType: stageType, // TODO
+                stageType: stageType,
                 maxScores: maxScores,
                 paperTargets: papers,
                 poppersOrPlates: plates,

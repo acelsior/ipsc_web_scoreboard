@@ -1,25 +1,32 @@
 "use client";
-import { GetStageDTO } from "@/app/dtos/stage.dto";
+import { StageDTO } from "@/app/dtos/stage.dto";
 import styles from "./stageCard.module.css";
 
-export default function StageCard(props: GetStageDTO) {
+export interface IStageCardProps extends StageDTO {
+    hideDeleteButton?: boolean;
+    hideDetailsButton?: boolean;
+    children?: React.ReactNode;
+}
+
+export default function StageCard(props: IStageCardProps) {
     const deleteStageHandler = () => {
-        const confirmRes = confirm(`Confirm delete stage "${props.title}"`)
+        const confirmRes = confirm(`Confirm delete stage "${props.title}"`);
         if (confirmRes) {
             fetch(`https://api.constrmrf.tk/api/stage/${props.id}`, {
-                method: 'DELETE'
-            }).then(res => res.json()).then(res => {
-                if (res.affected >= 1) {
-                    alert('Deleted successfully');
-                } else {
-                    alert('Deletion failed!!!!');
-                }
+                method: "DELETE",
             })
+                .then((res) => res.json())
+                .then((res) => {
+                    if (res.affected >= 1) {
+                        alert("Deleted successfully");
+                    } else {
+                        alert("Deletion failed!!!!");
+                    }
+                });
         }
-    }
+    };
 
-    const detailStageHandler = () => {
-    }
+    const detailStageHandler = () => {};
 
     return (
         <div className={styles.stageCardContainer}>
@@ -29,27 +36,32 @@ export default function StageCard(props: GetStageDTO) {
                 src={`https://api.constrmrf.tk/api/image/${props.images[0].id}`}
             />
             <div className={styles.rightButtonGroup}>
-                <button
-                    onClick={detailStageHandler}
-                >
-                    Details
-                </button>
-                <button
-                    style={{
-                        color: "red",
-                        fontWeight: "bold",
-                    }}
-                    onClick={deleteStageHandler}
-                >
-                    Delete
-                </button>
+                {props.hideDetailsButton ? (
+                    <></>
+                ) : (
+                    <button onClick={detailStageHandler}>Details</button>
+                )}
+                {props.hideDeleteButton ? (
+                    <></>
+                ) : (
+                    <button
+                        style={{
+                            color: "red",
+                            fontWeight: "bold",
+                        }}
+                        onClick={deleteStageHandler}
+                    >
+                        Delete
+                    </button>
+                )}
+                {props.children}
             </div>
             <div className={styles.stageCardTextContainer}>
                 <div
                     className={styles.stageCardTextRow}
                     style={{
                         gridRow: 1,
-                        fontSize: "large"
+                        fontSize: "large",
                     }}
                 >
                     <h1>{props.title}</h1>
@@ -69,8 +81,8 @@ export default function StageCard(props: GetStageDTO) {
                     }}
                 >
                     <p>
-                        {props.stageType} Stage, Min rounds: {props.minRounds}+1,
-                        Max scores: {props.maxScores}
+                        {props.stageType} Stage, Min rounds: {props.minRounds}
+                        +1, Max scores: {props.maxScores}
                     </p>
                 </div>
             </div>

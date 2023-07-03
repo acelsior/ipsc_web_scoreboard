@@ -65,7 +65,7 @@ export default function ShooterScoringCard(props: IShootingScoringCard) {
                             <p>{props.score.plateMissCount}PPM</p>
                             <p>{props.score.procedureErrorCount}PRO</p>
                             <p>Time: {props.score.timeCount}</p>
-                            <p>HF: {props.score.hitFactor}</p>
+                            <p>HF: {props.score.hitFactor.toFixed(3)}</p>
                         </>
                     )
                 ) : (

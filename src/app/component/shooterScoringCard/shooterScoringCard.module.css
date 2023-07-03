@@ -13,6 +13,9 @@
     width: 100%;
     padding-right: 10px;
 }
+.nameContainer > p {
+    font-size: xx-large;
+}
 
 .scoreContainer {
     height: 100%;

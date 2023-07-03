@@ -84,8 +84,8 @@ export default function ShooterScoringCard(props: {
         getFetcher,
         {
             onSuccess(data, key, config) {
-                console.log("Stage data loaded");
                 if (inited) return;
+                console.log("Stage data loaded");
                 let newData: PaperTargetData[] = [];
                 for (let index = 0; index < data.paperTargets; index++) {
                     newData[index] = {
@@ -564,14 +564,13 @@ export default function ShooterScoringCard(props: {
                 }
             }
         });
-        let method = "POST"
-        if (scoreData?.attempted) {
-            method = "PUT"
-        }
+
+        let method = "PUT"
+        let apiSite = `https://api.constrmrf.tk/api/stage/${SCORE_ID}/score`
         fetch(
-            `https://api.constrmrf.tk/api/shooter/${scoreData?.shooter.id}/stage`,
+            apiSite,
             {
-                method: "method",
+                method: method,
                 headers: [["Content-Type", "application/json"]],
                 body: JSON.stringify({
                     alpha: targetZoneCounter.a,
@@ -584,6 +583,7 @@ export default function ShooterScoringCard(props: {
                     procedureError: proErrorCount,
                     time: time,
                     disqualified: false,
+                    dnf: false,
                     stageID: STAGE_ID,
                     attempted: true,
                     proError: proErrorStrList,

@@ -15,7 +15,7 @@ import {
     ProceduralErrorObjectList,
     ProceduralErrorTypes,
 } from "@/types";
-import TimerPage from "@/app/pages/timer/page";
+import TimerPage from "@/app/pages/timer/timer";
 import { useRouter } from "next/navigation";
 
 interface PaperTargetData {

@@ -1,0 +1,56 @@
+.dialogContainer {
+    backdrop-filter: blur(10px) contrast(40%);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+.popupsContainer {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hide {
+    animation: hide 200ms ease 0s 1 normal forwards;
+}
+.show {
+    animation: dwshow 300ms ease 0s 1 normal forwards;
+}
+@keyframes hide {
+	0%{
+		opacity: 1;
+        backdrop-filter: blur(10px) contrast(40%);
+	}
+	50% {
+        backdrop-filter: blur(0px) contrast(100%);
+	}
+    99% {
+        opacity: 0;
+    }
+    100% {
+        display: none;
+    }
+}
+
+@keyframes dwshow {
+	0%{
+        opacity: 0;
+    }
+	20% {
+        backdrop-filter: blur(0px) contrast(100%);
+	}
+    99% {
+        opacity: 1;
+        backdrop-filter: blur(10px) contrast(40%);
+    }
+    100% {
+        display: block;
+    }
+}

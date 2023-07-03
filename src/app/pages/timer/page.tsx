@@ -20,7 +20,11 @@ export interface IHitHistory {
     shots: number;
 }
 
-export default function TimerPage() {
+export interface TimerProp {
+    setTime?: (time: number) => void; //if this is not null then this is a page, otherwise it is a compomnent
+}
+
+export default function TimerPage(props: TimerProp) {
     const route = useRouter();
     const pathname = usePathname();
     const [displayTime, setDisplayTime] = React.useState<number>(0);
@@ -119,7 +123,7 @@ export default function TimerPage() {
     }
 
     function openMenu() {
-        route.push(pathname + "/menu");
+        route.push("pages/timer/menu");
     }
 
     function hitHandler(event: Event, value: StopplateHitTimeDTO) {
@@ -151,6 +155,8 @@ export default function TimerPage() {
             />
         );
         setHitHistoryComponent(newHitHistoryComponent);
+        if (props.setTime)
+            props.setTime(resualt)
     }
 
     const reviewHandler = () => {

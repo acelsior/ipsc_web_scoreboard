@@ -1,4 +1,5 @@
 import { Condition } from "@/types";
+import { HistoryDTO, ShooterDTO } from "./shooter.dto";
 
 export interface GetImageDTO {
     id: number;
@@ -8,7 +9,7 @@ export interface GetImageDTO {
 }
 export type GetImagesDTO = GetImageDTO[]
 
-export interface GetStageDTO {
+export interface StageDTO {
     id: number;
     title: string;
     description: string;
@@ -20,4 +21,24 @@ export interface GetStageDTO {
     poppersOrPlates: number;
     noShoots: number;
     minRounds: number;
+    history: HistoryDTO[];
+}
+
+export interface StageScoreDTO {
+    id: number;
+    alphaCount: number;
+    charlieCount: number;
+    deltaCount: number;
+    paperMissCount: number;
+    plateCount: number;
+    plateMissCount: number;
+    noShootCount: number;
+    procedureErrorCount: number;
+    scoreCount: number;
+    timeCount: number;
+    hitFactor: number;
+    disqualified: boolean;
+    didNotFinished: boolean;
+    shooter: ShooterDTO;
+    attempted: boolean;
 }

@@ -38,6 +38,8 @@
     --callout-border-rgb: 172, 175, 176;
     --card-rgb: 180, 185, 188;
     --card-border-rgb: 131, 134, 135;
+    --caution-color: 255, 50, 50;
+    --correct-guide-color: 50, 255, 50;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -128,4 +130,21 @@ button:hover, input[type="submit"] {
     background: rgba(var(--card-rgb), 0.1);
     border: 1px solid rgba(var(--card-border-rgb), 0.15);
     box-shadow: 0 0 10px 0px rgba(var(--card-border-rgb), 0.12);
+}
+
+.caution {
+    background-color: rgba(var(--caution-color) , 0.4);
+}
+.correct {
+    background-color: rgba(var(--correct-guide-color) , 0.4);
+}
+
+.card {
+    color: rgb(var(--foreground-rgb));
+    padding: 1rem 1.2rem;
+    margin: 1em 0 0 0;
+    border-radius: var(--border-radius);
+    background-color: rgba(var(--card-rgb), 0.25);
+    box-shadow: 0 0 10px 0px rgba(var(--card-border-rgb), 0.1);
+    border: 1px solid rgba(var(--card-border-rgb), 0.15);
 }

@@ -25,7 +25,6 @@ export interface SettingStoreDTO {
     buzzerWaveform: BuzzerWaveformType;
 }
 
-
 export class Stopplate {
     static instance: Stopplate;
 
@@ -56,7 +55,6 @@ export class Stopplate {
             optionalServices: [STOPPLATE_SERVICE_UUID],
         });
 
-
         if (!this.bluetoothDevice?.gatt) return;
         console.log("Connecting to GATT Server...");
         this.bluetoothDevice.addEventListener(
@@ -68,60 +66,135 @@ export class Stopplate {
         this.bluetoothGATTServer = await this.bluetoothDevice.gatt.connect();
         if (!this.bluetoothGATTServer) return;
 
-
+        await this.retriveBLEChar();
+    }
+    private async retriveBLEChar() {
         console.log("Getting Service...");
-        this.bluetoothService = await this.bluetoothGATTServer.getPrimaryService(
-            STOPPLATE_SERVICE_UUID
-        );
-
+        this.bluetoothService =
+            await this.bluetoothGATTServer.getPrimaryService(
+                STOPPLATE_SERVICE_UUID
+            );
 
         if (!this.bluetoothService) return;
         console.log("Getting Characteristic...");
-        this.stopplateSignalChar = await this.bluetoothService
-            .getCharacteristic(STOPPLATE_SIGNAL_CHARACTERISTIC_UUID)
+        this.stopplateSignalChar =
+            await this.bluetoothService.getCharacteristic(
+                STOPPLATE_SIGNAL_CHARACTERISTIC_UUID
+            );
         await this.stopplateSignalChar.startNotifications();
         this.stopplateSignalChar.addEventListener(
             "characteristicvaluechanged",
             (event: Event) => {
                 this.onHitListener.forEach((cb) => {
-                    cb(event, JSON.parse(new TextDecoder().decode((event as unknown as {target:{value:BufferSource}}).target.value as BufferSource)))
-                })
+                    cb(
+                        event,
+                        JSON.parse(
+                            new TextDecoder().decode(
+                                (
+                                    event as unknown as {
+                                        target: { value: BufferSource };
+                                    }
+                                ).target.value as BufferSource
+                            )
+                        )
+                    );
+                });
             }
         );
-        this.startSignalChar = await this.bluetoothService
-            .getCharacteristic(START_SIGNAL_CHARACTERISTIC_UUID)
-        this.timeCorrectionChar = await this.bluetoothService
-            .getCharacteristic(TIME_CORRECTION_CHARACTERISTIC_UUID)
-        this.settingStoreChar = await this.bluetoothService
-            .getCharacteristic(SETTING_STORE_CHARACTERISTIC_UUID)
+        this.startSignalChar = await this.bluetoothService.getCharacteristic(
+            START_SIGNAL_CHARACTERISTIC_UUID
+        );
+        this.timeCorrectionChar = await this.bluetoothService.getCharacteristic(
+            TIME_CORRECTION_CHARACTERISTIC_UUID
+        );
+        this.settingStoreChar = await this.bluetoothService.getCharacteristic(
+            SETTING_STORE_CHARACTERISTIC_UUID
+        );
         //init stopplate time
         await this.timeCorrectionChar.writeValueWithoutResponse(
             new TextEncoder().encode(Date.now().toString())
         );
     }
+
     disconnect() {
-        this.bluetoothGATTServer?.disconnect();
+        this.normalDisconnect();
     }
     async startStopplateTimmer() {
-        return await this.startSignalChar?.readValue();
+        try {
+            return await this.startSignalChar?.readValue();
+        } catch (e) {
+            this.reconnect().then(() => {
+                this.startStopplateTimmer();
+            });
+        }
     }
     registerHitEvent(cb: (event: Event, value: StopplateHitTimeDTO) => void) {
         this.onHitListener.push(cb);
     }
-    async getSettingFromStopplate(): Promise<SettingStoreDTO> {
-        return JSON.parse(new TextDecoder().decode(await this.settingStoreChar?.readValue()));
+    async getSettingFromStopplate(): Promise<SettingStoreDTO | undefined> {
+        let settingChar: DataView | undefined;
+        settingChar = await new Promise(async (resolve, reject) => {
+            try {
+                settingChar = await this.settingStoreChar?.readValue();
+                resolve(settingChar);
+            } catch (e) {
+                this.reconnect().then(async () => {
+                    settingChar = await this.settingStoreChar?.readValue();
+                    resolve(settingChar);
+                });
+            }
+        });
+        return JSON.parse(new TextDecoder().decode(settingChar));
     }
     async writeSettingFromStopplate(newConfig: SettingStoreDTO) {
-        return await this.settingStoreChar?.writeValueWithoutResponse(new TextEncoder().encode(JSON.stringify(newConfig)));
+        try {
+            return await this.settingStoreChar?.writeValueWithoutResponse(
+                new TextEncoder().encode(JSON.stringify(newConfig))
+            );
+        } catch (e) {
+            this.reconnect().then(() => {
+                this.writeSettingFromStopplate(newConfig);
+            });
+        }
     }
     removeAllEventListener() {
         this.onHitListener = [];
     }
-    
+
+    reconnect() {
+        return new Promise<void>((resolve, reject) => {
+            exponentialBackoff(
+                10 /* max retries */,
+                3 /* seconds delay */,
+                () => {
+                    time("Connecting to Bluetooth Device... ");
+                    return this.bluetoothDevice?.gatt?.connect();
+                },
+                async () => {
+                    console.log(
+                        "> Bluetooth Device connected. Try disconnect it now."
+                    );
+                    await this.retriveBLEChar();
+                    resolve();
+                },
+                function fail() {
+                    time("Failed to reconnect.");
+                    reject();
+                }
+            );
+        });
+    }
 
     private onDisconnected() {
+        if (this.isConnected) {
+            this.reconnect();
+        }
+    }
+
+    private normalDisconnect() {
         console.log("Disconnected");
         this.isConnected = false;
+        this.bluetoothGATTServer?.disconnect();
         delete this.bluetoothDevice;
         delete this.bluetoothGATTServer;
         delete this.bluetoothService;
@@ -130,4 +203,28 @@ export class Stopplate {
         delete this.stopplateSignalChar;
         delete this.settingStoreChar;
     }
+}
+
+function exponentialBackoff(
+    max: number,
+    delay: number,
+    toTry: () => any,
+    success: (event: any) => void,
+    fail: () => void
+) {
+    toTry()
+        .then((result: any) => success(result))
+        .catch((_: any) => {
+            if (max === 0) {
+                return fail();
+            }
+            time("Retrying in " + delay + "s... (" + max + " tries left)");
+            setTimeout(function () {
+                exponentialBackoff(--max, delay * 2, toTry, success, fail);
+            }, delay * 1000);
+        });
+}
+
+function time(text: string) {
+    console.log("[" + new Date().toJSON().substr(11, 8) + "] " + text);
 }

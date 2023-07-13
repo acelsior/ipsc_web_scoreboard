@@ -18,13 +18,16 @@
 }
 
 .hide {
-    animation: hide 200ms ease 0s 1 normal forwards;
+    animation: dwhide 200ms ease 0s 1 normal forwards;
+    display: none;
 }
 .show {
     animation: dwshow 300ms ease 0s 1 normal forwards;
+    display: block;
 }
-@keyframes hide {
+@keyframes dwhide {
 	0%{
+        display: block;
 		opacity: 1;
         backdrop-filter: blur(10px) contrast(40%);
 	}

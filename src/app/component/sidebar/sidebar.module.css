@@ -10,7 +10,7 @@
     font-family: var(--font-mono);
     width: 15rem;
     /* height: 100vh; */
-    top:0;
+    top: 0;
     bottom: 0;
     position: static;
     margin: 0;
@@ -55,6 +55,11 @@
 @media (max-width: 600px) {
     .contentGrid {
         display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
     }
     .contentBox {
         top: 0;
@@ -62,8 +67,11 @@
         position: absolute;
         width: 100%;
         height: 100%;
+        padding: 1rem;
+        padding-left: 3em;
     }
     .sideBarBox {
+        position: absolute;
         z-index: 10000;
         left: -13em;
         width: 15em;

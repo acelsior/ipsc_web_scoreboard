@@ -69,6 +69,10 @@ export class Stopplate {
         await this.retriveBLEChar();
     }
     private async retriveBLEChar() {
+        if (!this.bluetoothGATTServer) {
+            alert("Disconnected!")
+            return;
+        };
         console.log("Getting Service...");
         this.bluetoothService =
             await this.bluetoothGATTServer.getPrimaryService(

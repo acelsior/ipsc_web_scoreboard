@@ -1,7 +1,11 @@
 "use client";
 import React, { ChangeEvent, MutableRefObject } from "react";
 import style from "./page.module.css";
-import { BuzzerWaveformType } from "@/app/class/buzzer";
+import {
+    BuzzerWaveformObject,
+    BuzzerWaveformType,
+    beep,
+} from "@/app/class/buzzer";
 import { SettingStoreDTO, Stopplate } from "@/app/class/stopplate/stopplate";
 
 function clampInt(
@@ -110,7 +114,7 @@ export default function MenuPage() {
         buzzerHertz,
         buzzerWaveform,
         stopplate,
-        inited
+        inited,
     ]);
 
     const flashDurationChangeHandler: React.ChangeEventHandler<
@@ -164,6 +168,10 @@ export default function MenuPage() {
             console.log(stopplate.isConnected);
             setIsConnected(false);
         }, 100);
+    };
+
+    const tryBuzzer = async () => {
+        beep(1024, BuzzerWaveformObject[BuzzerWaveformType.Sawtooth], 2000);
     };
 
     return (
@@ -274,7 +282,19 @@ export default function MenuPage() {
                     </div>
                 </>
             ) : (
-                <h1>Connect to config more settings</h1>
+                <>
+                    <h1>Connect to config more settings</h1>
+                    <div className={style.stopplateRow}>
+                        <button
+                            onClick={tryBuzzer}
+                            style={{
+                                width: "100%",
+                            }}
+                        >
+                            Try buzzer
+                        </button>
+                    </div>
+                </>
             )}
         </div>
     );

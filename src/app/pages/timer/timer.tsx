@@ -6,7 +6,7 @@ import {
     StopplateHitTimeDTO,
 } from "@/app/class/stopplate/stopplate";
 import { usePathname, useRouter } from "next/navigation";
-import { BuzzerWaveformObject, beep } from "@/app/class/buzzer";
+import { BuzzerWaveformObject, BuzzerWaveformType, beep } from "@/app/class/buzzer";
 import HitHistoryItem from "@/app/component/timer/hitHistoryItem";
 function getRandomNumberInRange(min: number, max: number) {
     min = Math.ceil(min);
@@ -45,6 +45,7 @@ export default function Timer(props: TimerProp) {
     });
 
     async function startHandler() {
+        beep(1, "sine" , 0, 0);
         if (!stopplateInstance.isConnected) { 
             alert("Please connect to the stoppplate !")
             return;
@@ -58,6 +59,7 @@ export default function Timer(props: TimerProp) {
             review: false,
             stop: false,
         });
+        
         var randomTime =
             getRandomNumberInRange(
                 setting.minRandomTime,
@@ -65,26 +67,22 @@ export default function Timer(props: TimerProp) {
             ) * 1000;
         console.log(setting);
         setCurrentViewIndex(0);
-        countDown(randomTime, () => {
-            console.log("done");
-            beep(
-                setting.buzzerHertz,
-                BuzzerWaveformObject[setting.buzzerWaveform],
-                1000
-            );
-            stopplateInstance.startStopplateTimmer();
-            stopplateInstance.registerHitEvent(hitHandler);
-            setButtonDisableState({
-                menu: true,
-                start: true,
-                clear: true,
-                review: false,
-                stop: false,
-            });
+        
+        await countDown(randomTime);
+        beep(setting.buzzerHertz, BuzzerWaveformObject[setting.buzzerWaveform] , 1000);
+        stopplateInstance.startStopplateTimmer();
+        stopplateInstance.registerHitEvent(hitHandler);
+        setButtonDisableState({
+            menu: true,
+            start: true,
+            clear: true,
+            review: false,
+            stop: false,
         });
+
     }
 
-    async function countDown(ms: number, cb: Function) {
+    async function countDown(ms: number, cb?: Function) {
         const startCountDownTime = Date.now();
         var __intervalID: NodeJS.Timer;
         __intervalID = await new Promise<NodeJS.Timer>((resolve, reject) => {
@@ -98,6 +96,7 @@ export default function Timer(props: TimerProp) {
                 }
             }, 1);
         });
+        if (!cb) return;
         clearInterval(__intervalID);
         setIntervalID(null);
         cb();

@@ -6,7 +6,11 @@ import {
     StopplateHitTimeDTO,
 } from "@/app/class/stopplate/stopplate";
 import { usePathname, useRouter } from "next/navigation";
-import { BuzzerWaveformObject, BuzzerWaveformType, beep } from "@/app/class/buzzer";
+import {
+    BuzzerWaveformObject,
+    BuzzerWaveformType,
+    beep,
+} from "@/app/class/buzzer";
 import HitHistoryItem from "@/app/component/timer/hitHistoryItem";
 function getRandomNumberInRange(min: number, max: number) {
     min = Math.ceil(min);
@@ -28,7 +32,6 @@ export default function Timer(props: TimerProp) {
     const route = useRouter();
     const pathname = usePathname();
     const [displayTime, setDisplayTime] = React.useState<number>(0);
-    const [menuState, setMenuState] = React.useState<boolean>(false);
     const stopplateInstance = Stopplate.getInstance();
     const [intervalID, setIntervalID] = React.useState<NodeJS.Timer | null>();
     const [hitHistoryComponent, setHitHistoryComponent] = React.useState<
@@ -45,9 +48,10 @@ export default function Timer(props: TimerProp) {
     });
 
     async function startHandler() {
-        beep(1, "sine" , 0, 0);
-        if (!stopplateInstance.isConnected) { 
-            alert("Please connect to the stoppplate !")
+        beep(1, "sine", 1, 0);
+
+        if (!stopplateInstance.isConnected) {
+            alert("Please connect to the stoppplate !");
             return;
         }
         clearHandler();
@@ -59,30 +63,34 @@ export default function Timer(props: TimerProp) {
             review: false,
             stop: false,
         });
-        
+
         var randomTime =
             getRandomNumberInRange(
                 setting.minRandomTime,
                 setting.maxRandomTime
             ) * 1000;
-        console.log(setting);
-        setCurrentViewIndex(0);
         
-        await countDown(randomTime);
-        beep(setting.buzzerHertz, BuzzerWaveformObject[setting.buzzerWaveform] , 1000);
-        stopplateInstance.startStopplateTimmer();
-        stopplateInstance.registerHitEvent(hitHandler);
-        setButtonDisableState({
-            menu: true,
-            start: true,
-            clear: true,
-            review: false,
-            stop: false,
+        await countDown(randomTime, () => {
+            console.log(hitHistory,hitHistoryComponent);
+            beep(
+                setting.buzzerHertz,
+                BuzzerWaveformObject[setting.buzzerWaveform],
+                1000
+            );
+            stopplateInstance.startStopplateTimmer();
+            stopplateInstance.registerHitEvent(hitHandler);
+            setButtonDisableState({
+                menu: true,
+                start: true,
+                clear: true,
+                review: false,
+                stop: false,
+            });
         });
-
     }
 
-    async function countDown(ms: number, cb?: Function) {
+
+    async function countDown(ms: number, cb: Function) {
         const startCountDownTime = Date.now();
         var __intervalID: NodeJS.Timer;
         __intervalID = await new Promise<NodeJS.Timer>((resolve, reject) => {
@@ -96,7 +104,6 @@ export default function Timer(props: TimerProp) {
                 }
             }, 1);
         });
-        if (!cb) return;
         clearInterval(__intervalID);
         setIntervalID(null);
         cb();
@@ -111,7 +118,9 @@ export default function Timer(props: TimerProp) {
         stopplateInstance.removeAllEventListener();
         setDisplayTime(0);
         setHitHistory([]);
+        Reflect.set(hitHistory, "length", 0); // true
         setHitHistoryComponent([]);
+        Reflect.set(hitHistoryComponent, "length", 0); // true
         setButtonDisableState({
             menu: false,
             start: false,
@@ -154,8 +163,7 @@ export default function Timer(props: TimerProp) {
             />
         );
         setHitHistoryComponent(newHitHistoryComponent);
-        if (props?.setTime)
-            props.setTime(resualt)
+        if (props?.setTime) props.setTime(resualt);
     }
 
     const reviewHandler = () => {
@@ -165,62 +173,53 @@ export default function Timer(props: TimerProp) {
             menu: false,
             start: false,
             clear: false,
-            review: false
-        })
-        if (hitHistory.length == 0)
-            return;
+            review: false,
+        });
+        if (hitHistory.length == 0) return;
         setDisplayTime(hitHistory[currentViewIndex].time);
-        if (currentViewIndex + 1 == hitHistory.length)
-            setCurrentViewIndex(0);
+        if (currentViewIndex + 1 == hitHistory.length) setCurrentViewIndex(0);
         else setCurrentViewIndex(currentViewIndex + 1);
     };
 
-    if (menuState)
-        return (
-            <div>
-                <h1>wda</h1>
+    return (
+        <div className={styles.timerContainer}>
+            <div className={styles.timerControll}>
+                <h1 className={styles.timerTimeDisplay}>
+                    {displayTime.toFixed(2)}
+                </h1>
+                <button
+                    className={styles.timerControllButton}
+                    onClick={openMenu}
+                    disabled={buttonDisableState.menu}
+                >
+                    Menu
+                </button>
+                <button
+                    className={styles.timerControllButton}
+                    onClick={startHandler}
+                    disabled={buttonDisableState.start}
+                >
+                    Start
+                </button>
+                <button
+                    className={styles.timerControllButton}
+                    onClick={clearHandler}
+                    disabled={buttonDisableState.clear}
+                >
+                    Clear
+                </button>
+                <button
+                    className={styles.timerControllButton}
+                    onClick={reviewHandler}
+                    disabled={buttonDisableState.review}
+                >
+                    Review
+                </button>
             </div>
-        );
-    else
-        return (
-            <div className={styles.timerContainer}>
-                <div className={styles.timerControll}>
-                    <h1 className={styles.timerTimeDisplay}>
-                        {displayTime.toFixed(2)}
-                    </h1>
-                    <button
-                        className={styles.timerControllButton}
-                        onClick={openMenu}
-                        disabled={buttonDisableState.menu}
-                    >
-                        Menu
-                    </button>
-                    <button
-                        className={styles.timerControllButton}
-                        onClick={startHandler}
-                        disabled={buttonDisableState.start}
-                    >
-                        Start
-                    </button>
-                    <button
-                        className={styles.timerControllButton}
-                        onClick={clearHandler}
-                        disabled={buttonDisableState.clear}
-                    >
-                        Clear
-                    </button>
-                    <button
-                        className={styles.timerControllButton}
-                        onClick={reviewHandler}
-                        disabled={buttonDisableState.review}
-                    >
-                        Review
-                    </button>
-                </div>
-                <p>Hit History</p>
-                <div className={styles.timerHistory}>
-                    <div>{hitHistoryComponent}</div>
-                </div>
+            <p>Hit History</p>
+            <div className={styles.timerHistory}>
+                {hitHistoryComponent}
             </div>
-        );
+        </div>
+    );
 }

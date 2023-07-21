@@ -7,10 +7,10 @@ export interface IHitHistoryItem {
 
 export default function HitHistoryItem(props: IHitHistoryItem) {
     return (
-        <p className={styles.hitText}>
+        <div className={styles.hitText}>
             <p>{props.shotsNumber}</p>
             <p>{props.hitTime.toFixed(2)}</p>
             <p>{props.splitTime.toFixed(2)}</p>
-        </p>
+        </div>
     );
 }

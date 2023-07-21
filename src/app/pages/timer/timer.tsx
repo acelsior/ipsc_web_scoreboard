@@ -2,6 +2,7 @@
 import React, { ReactNode } from "react";
 import styles from "./page.module.css";
 import {
+    SettingStoreDTO,
     Stopplate,
     StopplateHitTimeDTO,
 } from "@/app/class/stopplate/stopplate";
@@ -55,7 +56,7 @@ export default function Timer(props: TimerProp) {
             return;
         }
         clearHandler();
-        var setting = await stopplateInstance.getSettingFromStopplate();
+        var setting = await stopplateInstance.getSettingFromStopplate() as SettingStoreDTO;
         setButtonDisableState({
             menu: true,
             start: true,

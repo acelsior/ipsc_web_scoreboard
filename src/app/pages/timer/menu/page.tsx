@@ -153,7 +153,7 @@ export default function MenuPage() {
     const connectHandler = async () => {
         stopplate.disconnect();
         await stopplate.connect();
-        const setting = await stopplate.getSettingFromStopplate();
+        const setting = await stopplate.getSettingFromStopplate() as SettingStoreDTO;
         setFlashDuration(setting.flashDuration);
         setBuzzerHertz(setting.buzzerHertz);
         setBuzzerWaveform(setting.buzzerWaveform);

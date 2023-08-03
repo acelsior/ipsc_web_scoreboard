@@ -171,7 +171,7 @@ export default function MenuPage() {
     };
 
     const tryBuzzer = async () => {
-        beep(1024, BuzzerWaveformObject[BuzzerWaveformType.Sawtooth], 2000);
+        beep(1024, BuzzerWaveformObject[BuzzerWaveformType.Sawtooth], 1000);
     };
 
     return (
